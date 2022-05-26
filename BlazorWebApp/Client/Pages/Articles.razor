@@ -1,0 +1,47 @@
+﻿@page "/articles"
+@using BlazorWebApp.Shared
+@inject HttpClient Http
+
+<PageTitle>Articles</PageTitle>
+
+@if (articles != null)
+{
+    @foreach (var article in articles)
+    {
+       // TODO: style more. and figure out side by side 
+        <MudGrid Spacing="@spacing" Justify="Justify.Center">
+            <MudItem>
+                <MudPaper Height="200px" Width="300px">
+                    <MudCardMedia Image="images/csharp.png" Height="100" />
+                    <MudText Typo="Typo.h5">Old Paint</MudText>
+                    <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    }
+}
+
+
+@code {
+    private Article[]? articles;
+    private string articleImage = string.Empty;
+    public int spacing { get; set; } = 4;
+
+    public void GetImage()
+    {
+        if (articles != null)
+        {
+            foreach (var i in articles)
+            {
+                articleImage = i.ImageURL;
+            }
+        }
+
+        // Grab the ImageURL from Article then display it
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        articles = await Http.GetFromJsonAsync<Article[]>("api/Article");
+    }
+}
